@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1584390673 source:/home/guilhermelourenco/c/matricula/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
