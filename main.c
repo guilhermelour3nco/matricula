@@ -73,7 +73,7 @@ int main() {
 }
 
 void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc){
-    int i, opcaoAtual, qtdAl = 0, qtdDisc = 0;
+    int i, j, opcaoAtual, qtdAl = 0, qtdDisc = 0;
     char alunosSelecionados[20][20], disciplinasSelecionadas[20][20];
 
     system("clear");
@@ -87,17 +87,12 @@ void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *
                 printf("%s", alunosSelecionados[i]);
             }
         }
-        printf("\n\nSelecione os alunos a serem matriculados: ");
+        printf("\n\nSelecione a 'OPCAO' do aluno a ser matriculado \nou 'SELECIONE 0' para continuar: ");
         scanf("%d", &opcaoAtual);
 
         strcpy(alunosSelecionados[qtdAl++], alunos[opcaoAtual-1].nome);
         system("clear");
-    } while (opcaoAtual != 10);
-
-    if (opcaoAtual == 10) {
-        return;
-    }
-
+    } while (opcaoAtual != 0);
 
     do {
         imprimeDisciplinas(disciplinas, posDisc);
@@ -117,6 +112,17 @@ void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *
         strcpy(disciplinasSelecionadas[qtdDisc++], disciplinas[opcaoAtual-1].nome);
         system("clear");
     } while (opcaoAtual != 10);
+
+    for (i=0; i<qtdDisc; i++) {
+        for (j=0; j<(*posDisc)-1; j++) {
+            printf("\n%s -- %s | i = %d, j = %d", disciplinasSelecionadas[i], disciplinas[j].nome, i, j);
+            if (disciplinasSelecionadas[i] == disciplinas[j].nome) {
+                printf("it works");
+            }
+        }
+    }
+    
+    scanf("%d", &opcaoAtual);
 }
 
 void novaDisciplina(discStr disciplinas[], int *pos){
@@ -198,7 +204,8 @@ void cadastraProf(profStr professores[], int *pos){
 void imprimeAlunos(alunoStr alunos[], int *posAl) {
     int i;
 
-    printf("\n\t\tLista de Alunos Cadastrados\n\n\n");
+    printf("\n\t\t--Lista de Alunos Cadastrados--\n\n\n");
+    printf("OPCAO\t\tNOME\t\tRA\n");
 
     if(*posAl == 0){
         printf("NENHUM ALUNO FOI CADASTRADO AINDA!");
@@ -207,7 +214,7 @@ void imprimeAlunos(alunoStr alunos[], int *posAl) {
 
     for(i=0; i<*posAl;i++)
     {
-        printf("NOME:\t%s\t\tRA: %d\n", alunos[i].nome, alunos[i].ra);
+        printf("[%d] \t\t%s\t\t %d\n", i+1, alunos[i].nome, alunos[i].ra);
     }
     }
 
@@ -217,14 +224,15 @@ void imprimeAlunos(alunoStr alunos[], int *posAl) {
 void imprimeDisciplinas(discStr disciplinas[], int *posDisc) {
     int i;
 
-    printf("\n\t\tLista de Disciplinas Cadastradas\n\n\n");
+    printf("\n\t\t--Lista de Disciplinas Cadastradas--\n\n\n");
+    printf("OPCAO\t\tNOME\t\tID\n");
 
     if(*posDisc == 0){
         printf("NENHUMA DISCIPLINA FOI CADASTRADA AINDA!");
 
     }else{
         for(i=0; i<*posDisc; i++) {
-            printf("NOME:\t%s\t\tID: %d\n", disciplinas[i].nome, disciplinas[i].id);
+            printf("[%d] \t\t%s\t\t %d\n", i+1, disciplinas[i].nome, disciplinas[i].id);
         }
     }
 
