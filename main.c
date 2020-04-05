@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*
-    strcpy(disciplina[0].matriculados[0], alunos[(*pos)].nome);
-    puts(disciplina[0].matriculados[0]);
-*/
 
 typedef struct {
     char nome[20];
@@ -14,7 +10,8 @@ typedef struct {
 
 typedef struct {
     char nome[20];
-    int cod;
+    int cod, vinculos;
+    char vinculadoCom[20][20]
 } profStr;
 
 typedef struct {
@@ -28,27 +25,31 @@ void cadastraAluno(alunoStr alunos[], int *pos);
 void imprimeAlunos(alunoStr alunos[], int *posAl);
 void imprimeDisciplinas(discStr disciplinas[], int *posDisc);
 void imprimeProfessores(profStr professores[], int *posProf);
+void imprimeDisciplinasMatriculadas(alunoStr alunos[], int *posAl);
 void imprimeAlunosMatriculados(discStr disciplinas[], int *posDisc);
+void disciplinasDoProfessor(profStr professores[], int *posProf);
+void professorDaDisciplina(discStr disciplinas[], int *posDisc);
 void imprimeListas(alunoStr alunos[], int *pos, discStr disciplinas[], int *posDisc, profStr professores[], int *posProf);
-void novaDisciplina(discStr disciplinas[], int *pos);
+void cadastraDisciplina(discStr disciplinas[], int *pos);
 void cadastraProf(profStr professores[], int *pos);
 void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc);
+void vincularProfessor(profStr professores[], int *posProf, discStr disciplinas[], int *posDisc);
 
 int main() {
     alunoStr alunos[20];
     profStr professores[20];
     discStr disciplinas[20];
     int posAluno = 0, posProf = 0, posDisc = 0, ctrl=1, i;
-    char no[10], na[10];
 
     // Initial set up.
     for(i=0; i<20; i++){
         alunos[i].matriculas = 0;
+        professores[i].vinculos = 0;
         disciplinas[i].matriculas = 0;
     }
 
     do {
-        // Construct menu.
+        // Menu constructor.
         do {
             system("clear");
             printf("\n\t\tMain Menu\n\n\n\t(1)\tCadastro de Aluno [ON]\n\n\t(2)\tCadastro de Professor [ON]\n\n\t(3)\tCadastro de Disciplina [ON]\n\n\t(4)\tRemover Aluno [ON]\n\n\t(5)\tImprimir Listas [ON]\n\n\t(6)\tMatricular Alunos [ON]\n\n\t(7)\tVincular Professor \n\n\t(8)\tENCERRAR [ON]\n\n");
@@ -57,29 +58,29 @@ int main() {
 
         } while (ctrl < 1 || ctrl > 8);
 
-    switch (ctrl) {
-    case 1:
-        cadastraAluno(alunos, &posAluno);
-        break;
-    case 2:
-        cadastraProf(professores, &posProf);
-        break;
-    case 3:
-        novaDisciplina(disciplinas, &posDisc);
-        break;
-    case 4:
-        removeAluno(alunos, &posAluno);
-        break;
-    case 5:
-        imprimeListas(alunos, &posAluno, disciplinas, &posDisc, professores, &posProf);
-        break;
-    case 6:
-        cadastrarAlunos(alunos, &posAluno, disciplinas, &posDisc);
-        break;
-    case 7:
-        vincularProfessor(professores, &posProf, disciplinas, &posDisc);
-        break;
-    }
+        switch (ctrl) {
+        case 1:
+            cadastraAluno(alunos, &posAluno);
+            break;
+        case 2:
+            cadastraProf(professores, &posProf);
+            break;
+        case 3:
+            cadastraDisciplina(disciplinas, &posDisc);
+            break;
+        case 4:
+            removeAluno(alunos, &posAluno);
+            break;
+        case 5:
+            imprimeListas(alunos, &posAluno, disciplinas, &posDisc, professores, &posProf);
+            break;
+        case 6:
+            cadastrarAlunos(alunos, &posAluno, disciplinas, &posDisc);
+            break;
+        case 7:
+            vincularProfessor(professores, &posProf, disciplinas, &posDisc);
+            break;
+        }
     } while (ctrl != 8);
 
     return 0;
@@ -122,7 +123,8 @@ void vincularProfessor(profStr professores[], int *posProf, discStr disciplinas[
 
     for(i=0; i < qtdDisc; i++){
         strcpy(disciplinas[listaDisciplinas[i]].ministradoPor, professores[prof].nome);
-        printf("\n%s", disciplinas[listaDisciplinas[i]].ministradoPor);
+        strcpy(professores[prof].vinculadoCom[professores[prof].vinculos++], disciplinas[listaDisciplinas[i]].nome);
+        printf("\n%s %s", disciplinas[listaDisciplinas[i]].ministradoPor, professores[prof].vinculadoCom[professores[prof].vinculos-1]);
     }
     scanf("%d", &i);
 
@@ -203,7 +205,7 @@ void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *
     scanf("%d", &opcaoAtual);
 }
 
-void novaDisciplina(discStr disciplinas[], int *pos){
+void cadastraDisciplina(discStr disciplinas[], int *pos){
     char c;
 
     do{
@@ -342,11 +344,71 @@ void imprimeAlunosMatriculados(discStr disciplinas[], int *posDisc) {
     scanf("%d", &i);
 }
 
-void imprimeListas (alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc, profStr professores[], int *posProf) {
-    int i;
+void imprimeDisciplinasMatriculadas(alunoStr alunos[], int *posAl) {
+    int ctrl, i;
     system("clear");
     imprimeAlunos(alunos, posAl);
-    imprimeDisciplinas(disciplinas, posDisc);
-    imprimeProfessores(professores, posProf);
+
+    printf("\nSelecione um aluno: "); scanf("%d", &ctrl);
+    for(i=0; i < alunos[ctrl-1].matriculas; i++){
+        printf("\n- %s", alunos[ctrl-1].minhasDisciplinas[i]);
+    }
     scanf("%d", &i);
+}
+
+void disciplinasDoProfessor(profStr professores[], int *posProf) {
+    int ctrl, i;
+    system("clear");
+    imprimeAlunos(professores, posProf);
+
+    printf("\nSelecione um professor: "); scanf("%d", &ctrl);
+    for(i=0; i < professores[ctrl-1].vinculos; i++){
+        printf("\n- %s", professores[ctrl-1].vinculadoCom[i]);
+    }
+    scanf("%d", &i);
+}
+
+void professorDaDisciplina(discStr disciplinas[], int *posDisc) {
+    int ctrl, i;
+    system("clear");
+    imprimeDisciplinas(disciplinas, posDisc);
+
+    printf("\nSelecione uma disciplina: "); scanf("%d", &ctrl);
+    printf("\n- %s", disciplinas[ctrl-1].ministradoPor);
+    scanf("%d", &i);
+}
+
+void imprimeListas (alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc, profStr professores[], int *posProf) {
+    int i, c;
+    do{
+        system("clear");
+        printf("\t\t--Menu de listagem--\n\n\n\t(1)\tImprimir todos os alunos\n\t(2)\tImprimir todos as disciplinas\n\t(3)\tImprimir todos os professores\n\t(4)\tConsultar alunos de uma disciplina\n\t(5)\tConsultar disciplinas de um aluno\n\t(6)\tConsultar disciplinas de um professor\n\t(7)\tConsultar professor da disciplina\n\nSelecione: ");
+        scanf("%d", &i);
+
+        switch (i) {
+        case 1:
+            imprimeAlunos(alunos, posAl);
+            break;
+        case 2:
+            imprimeDisciplinas(disciplinas, posDisc);
+            break;
+        case 3:
+            imprimeProfessores(professores, posProf);
+            break;
+        case 4:
+            imprimeAlunosMatriculados(disciplinas, posDisc);
+            break;
+        case 5:
+            imprimeDisciplinasMatriculadas(alunos, posAl);
+            break;
+        case 6:
+            disciplinasDoProfessor(professores, posProf);
+            break;
+        case 7:
+            professorDaDisciplina(disciplinas, posDisc);
+            break;
+        }
+    printf("\nNova consulta? [y/n]\n");
+    scanf("%s", &c);
+    }while(c != 'n');
 }
