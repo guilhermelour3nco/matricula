@@ -1,5 +1,5 @@
 # Matricula acadêmica
-# Scorecard | [- - - - - - - * * *] | [64.3%]
+# Scorecard | [- - - - - - - * * *] | [71.4%]
 
 ## Requisitos do projeto
 
@@ -21,7 +21,7 @@
 - [x] Imprimir a lista de todos os alunos.
 - [x] Imprimir a lista de todas as disciplinas.
 - [x] Imprimir a lista de todos os professores.
-- [ ] Imprimir a lista de disciplinas de um aluno.
+- [x] Imprimir a lista de disciplinas de um aluno.
 - [x] Imprimir a lista de alunos em uma disciplina.
 - [ ] Imprimir a lista de todas as disciplinas ministradas por um professor.
 - [ ] Imprimir a lista de todos os professores vinculados a uma disciplina.
