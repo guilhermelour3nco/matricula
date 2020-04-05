@@ -25,6 +25,8 @@
 - [ ] Imprimir a lista de todas as disciplinas ministradas por um professor.
 - [ ] Imprimir a lista de todos os professores vinculados a uma disciplina.
 
+## Metodos extras
+
 ### recursos visuais
 
 - [x] Limpar tela.
