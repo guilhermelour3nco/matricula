@@ -1,5 +1,5 @@
 # Matricula acadêmica
-# [- - - - - x x x x x] [50.0%]
+# [- - - - - - * * * *] [57.1%]
 
 ## Requisitos do projeto
 
@@ -12,7 +12,7 @@
 ### tratamento de dados
 
 - [x] Realizar a matrícula de  um conjunto de alunos em um conjunto de disciplinas.
-- [ ] Vincular professores a disciplinas:  Vincular um professor a um conjunto de disciplinas.
+- [x] Vincular professores a disciplinas:  Vincular um professor a um conjunto de disciplinas.
 - [ ] Cancelar a matrícula de um conjunto de alunos de um conjunto de disciplinas.
 - [ ] Remover vínculo de um conjunto de professores de um conjunto de disciplinas.
 
