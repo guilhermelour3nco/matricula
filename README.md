@@ -1,14 +1,14 @@
-# Projeto de matricula acadêmica
+# Matricula acadêmica
 
-## Requisitos
+## Requisitos do projeto
 
-### dados
+### cadastro
 
 - [x] Cadastrar alunos.
 - [x] Cadastrar disciplinas.
 - [x] Cadastrar professores.
 
-### métodos
+### tratamento de dados
 
 - [ ] Realizar a matrícula de  um conjunto de alunos em um conjunto de disciplinas.
 - [ ] Vincular professores a disciplinas:  Vincular um conjunto de  professores a um conjunto de disciplinas.
@@ -24,3 +24,9 @@
 - [ ] Imprimir a lista de alunos em uma disciplina.
 - [ ] Imprimir a lista de todas as disciplinas ministradas por um professor.
 - [ ] Imprimir a lista de todos os professores vinculados a uma disciplina.
+
+### recursos visuais
+
+- [x] Limpar tela.
+- [x] Reconstruir menu.
+- [x] Lista dinâmica de seleção (alunos/disciplinas selecionados(as))
