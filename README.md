@@ -1,4 +1,5 @@
-# Matricula acadêmica [35.7%]
+# Matricula acadêmica
+# [---_ _ _ _ _ _ _ ] [35.7%]
 
 ## Requisitos do projeto
 
