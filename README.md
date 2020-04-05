@@ -1,5 +1,5 @@
 # Matricula acadêmica
-# [- - - - - - * * * *] [57.1%]
+# Scorecard | [- - - - - - * * * *] | [57.1%]
 
 ## Requisitos do projeto
 
