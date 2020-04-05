@@ -8,7 +8,7 @@
 
 typedef struct {
     char nome[20];
-    int ra;
+    int ra, matriculas;
     char minhasDisciplinas[20][20];
 } alunoStr;
 
@@ -19,15 +19,17 @@ typedef struct {
 
 typedef struct {
     char nome[20];
-    int id;
-    char matriculados[20][20];
+    int id, matriculas;
+    char matriculados[20][20], ministradoPor[20];
 } discStr;
 
 void removeAluno(alunoStr alunos[], int *pos);
 void cadastraAluno(alunoStr alunos[], int *pos);
 void imprimeAlunos(alunoStr alunos[], int *posAl);
 void imprimeDisciplinas(discStr disciplinas[], int *posDisc);
-void imprimeListas(alunoStr alunos[], int *pos, discStr disciplinas[], int *posDisc);
+void imprimeProfessores(profStr professores[], int *posProf);
+void imprimeAlunosMatriculados(discStr disciplinas[], int *posDisc);
+void imprimeListas(alunoStr alunos[], int *pos, discStr disciplinas[], int *posDisc, profStr professores[], int *posProf);
 void novaDisciplina(discStr disciplinas[], int *pos);
 void cadastraProf(profStr professores[], int *pos);
 void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc);
@@ -36,16 +38,24 @@ int main() {
     alunoStr alunos[20];
     profStr professores[20];
     discStr disciplinas[20];
-    int posAluno = 0, posProf = 0, posDisc = 0, ctrl=1;
+    int posAluno = 0, posProf = 0, posDisc = 0, ctrl=1, i;
+    char no[10], na[10];
+
+    // Initial set up.
+    for(i=0; i<20; i++){
+        alunos[i].matriculas = 0;
+        disciplinas[i].matriculas = 0;
+    }
 
     do {
+        // Construct menu.
         do {
             system("clear");
-            printf("\n\t\tMain Menu\n\n\n\t(1)\tCadastro de Aluno [ON]\n\n\t(2)\tCadastro de Professor [ON]\n\n\t(3)\tCadastro de Disciplina [ON]\n\n\t(4)\tRemover Aluno [ON]\n\n\t(5)\tImprimir Listas\n\n\t(6)\tMatricular Alunos\n\n\t(7)\tENCERRAR [ON]\n\n");
-            if(ctrl < 1 || ctrl > 6) printf("OPCAO INVALIDA!\n");
+            printf("\n\t\tMain Menu\n\n\n\t(1)\tCadastro de Aluno [ON]\n\n\t(2)\tCadastro de Professor [ON]\n\n\t(3)\tCadastro de Disciplina [ON]\n\n\t(4)\tRemover Aluno [ON]\n\n\t(5)\tImprimir Listas [ON]\n\n\t(6)\tMatricular Alunos [ON]\n\n\t(7)\tVincular Professor \n\n\t(8)\tENCERRAR [ON]\n\n");
+            if(ctrl < 1 || ctrl > 7) printf("OPCAO INVALIDA!\n");
             scanf("%d", &ctrl);
 
-        } while (ctrl < 1 || ctrl > 7);
+        } while (ctrl < 1 || ctrl > 8);
 
     switch (ctrl) {
     case 1:
@@ -61,43 +71,30 @@ int main() {
         removeAluno(alunos, &posAluno);
         break;
     case 5:
-        imprimeListas(alunos, &posAluno, disciplinas, &posDisc);
+        imprimeListas(alunos, &posAluno, disciplinas, &posDisc, professores, &posProf);
         break;
     case 6:
         cadastrarAlunos(alunos, &posAluno, disciplinas, &posDisc);
         break;
+    case 7:
+        vincularProfessor(professores, &posProf, disciplinas, &posDisc);
+        break;
     }
-    } while (ctrl != 7);
+    } while (ctrl != 8);
 
     return 0;
 }
 
-void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc){
-    int i, opcaoAtual, qtdAl = 0, qtdDisc = 0;
-    char alunosSelecionados[20][20], disciplinasSelecionadas[20][20];
+void vincularProfessor(profStr professores[], int *posProf, discStr disciplinas[], int *posDisc) {
+    int i, j, prof, ctrl, qtdDisc = 0, listaDisciplinas[20];
+    char disciplinasSelecionadas[20][20];
 
     system("clear");
-    do {
-        imprimeAlunos(alunos, posAl);
+    imprimeProfessores(professores, posProf);
 
-        if (qtdAl){
-            printf("\nAlunos Selecionados: ");
-            for(i = 0; i < qtdAl; i++){
-                if(i != 0) printf(", ");
-                printf("%s", alunosSelecionados[i]);
-            }
-        }
-        printf("\n\nSelecione os alunos a serem matriculados: ");
-        scanf("%d", &opcaoAtual);
-
-        strcpy(alunosSelecionados[qtdAl++], alunos[opcaoAtual-1].nome);
-        system("clear");
-    } while (opcaoAtual != 10);
-
-    if (opcaoAtual == 10) {
-        return;
-    }
-
+    printf("\n\nSelecione a 'OPCAO' do professor a ser vinculado: ");
+    scanf("%d", &prof); prof -= 1;
+    system("clear");
 
     do {
         imprimeDisciplinas(disciplinas, posDisc);
@@ -111,12 +108,99 @@ void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *
                 printf("%s", disciplinasSelecionadas[i]);
             }
         }
+
+        printf("\n\nSelecione as disciplinas para incluir\nou 'SELECIONE 0' para continuar: ");
+        scanf("%d", &ctrl);
+
+        if(ctrl != 0) {
+            strcpy(disciplinasSelecionadas[qtdDisc], disciplinas[ctrl-1].nome);
+            listaDisciplinas[qtdDisc++] = ctrl-1;
+        }
+
+        system("clear");
+    } while (ctrl != 0);
+
+    for(i=0; i < qtdDisc; i++){
+        strcpy(disciplinas[listaDisciplinas[i]].ministradoPor, professores[prof].nome);
+        printf("\n%s", disciplinas[listaDisciplinas[i]].ministradoPor);
+    }
+    scanf("%d", &i);
+
+}
+
+void cadastrarAlunos(alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc){
+    int i, j, opcaoAtual, qtdAl = 0, qtdDisc = 0;
+    int listaAlunos[20], listaDisciplinas[20], objetoAtual;
+    char alunosSelecionados[20][20], disciplinasSelecionadas[20][20];
+
+    system("clear");
+    do {
+        imprimeAlunos(alunos, posAl);
+
+        // Imprime apenas após primeira entrada.
+        if (qtdAl){
+            printf("\nAlunos Selecionados: ");
+            for(i = 0; i < qtdAl; i++){
+
+                if(i != 0) printf(", ");
+                printf("%s", alunosSelecionados[i]);
+            }
+        }
+
+        printf("\n\nSelecione a 'OPCAO' do aluno a ser matriculado \nou 'SELECIONE 0' para continuar: ");
+        scanf("%d", &opcaoAtual);
+
+        if(opcaoAtual != 0) {
+            strcpy(alunosSelecionados[qtdAl], alunos[opcaoAtual-1].nome);
+            listaAlunos[qtdAl++] = opcaoAtual-1;
+        }
+
+        system("clear");
+    } while (opcaoAtual != 0);
+
+    do {
+        imprimeDisciplinas(disciplinas, posDisc);
+
+        if (qtdDisc) {
+
+            printf("\nDisciplinas Selecionadas: ");
+            for(i = 0; i < qtdDisc; i++){
+
+                if(i != 0) printf(", ");
+                printf("%s", disciplinasSelecionadas[i]);
+            }
+        }
+
         printf("\n\nSelecione as disciplinas para incluir: ");
         scanf("%d", &opcaoAtual);
 
-        strcpy(disciplinasSelecionadas[qtdDisc++], disciplinas[opcaoAtual-1].nome);
+        if(opcaoAtual != 0) {
+            strcpy(disciplinasSelecionadas[qtdDisc], disciplinas[opcaoAtual-1].nome);
+            listaDisciplinas[qtdDisc++] = opcaoAtual-1;
+        }
+
         system("clear");
-    } while (opcaoAtual != 10);
+    } while (opcaoAtual != 0);
+
+    // Insere alunos selecionados na disciplina.
+    // objetoAtual é usado para facilitar a leitura do código.
+    for (i=0; i < qtdDisc; i++) {
+        for (j=0; j < qtdAl; j++){
+            objetoAtual = listaDisciplinas[i];
+            strcpy(disciplinas[objetoAtual].matriculados[disciplinas[objetoAtual].matriculas++], alunosSelecionados[j]);
+            printf("\n%s", disciplinas[objetoAtual].matriculados[disciplinas[objetoAtual].matriculas-1]);
+        }
+    }
+    // Insere disciplinas selecionadas nas disciplinas do aluno.
+    for (i=0; i < qtdAl; i++) {
+        for (j=0; j < qtdDisc; j++){
+            objetoAtual = listaAlunos[i];
+            strcpy(alunos[objetoAtual].minhasDisciplinas[alunos[objetoAtual].matriculas++], disciplinasSelecionadas[j]);
+            printf("\n%s", alunos[objetoAtual].minhasDisciplinas[alunos[objetoAtual].matriculas-1]);
+        }
+    }
+    
+    scanf("%d", &opcaoAtual);
 }
 
 void novaDisciplina(discStr disciplinas[], int *pos){
@@ -198,17 +282,15 @@ void cadastraProf(profStr professores[], int *pos){
 void imprimeAlunos(alunoStr alunos[], int *posAl) {
     int i;
 
-    printf("\n\t\tLista de Alunos Cadastrados\n\n\n");
+    printf("\n\t\t--Lista de Alunos Cadastrados--\n\n\n");
 
     if(*posAl == 0){
         printf("NENHUM ALUNO FOI CADASTRADO AINDA!");
 
     }else{
-
-    for(i=0; i<*posAl;i++)
-    {
-        printf("NOME:\t%s\t\tRA: %d\n", alunos[i].nome, alunos[i].ra);
-    }
+        for(i=0; i<*posAl;i++) {
+            printf("OPCAO\t\tNOME\t\tRA\n[%d] \t\t%s\t\t %d\n", i+1, alunos[i].nome, alunos[i].ra);
+        }
     }
 
     printf("\n");
@@ -217,24 +299,54 @@ void imprimeAlunos(alunoStr alunos[], int *posAl) {
 void imprimeDisciplinas(discStr disciplinas[], int *posDisc) {
     int i;
 
-    printf("\n\t\tLista de Disciplinas Cadastradas\n\n\n");
+    printf("\n\t\t--Lista de Disciplinas Cadastradas--\n\n\n");
 
     if(*posDisc == 0){
         printf("NENHUMA DISCIPLINA FOI CADASTRADA AINDA!");
 
     }else{
         for(i=0; i<*posDisc; i++) {
-            printf("NOME:\t%s\t\tID: %d\n", disciplinas[i].nome, disciplinas[i].id);
+            printf("OPCAO\t\tNOME\t\tID\n[%d] \t\t%s\t\t %d\n", i+1, disciplinas[i].nome, disciplinas[i].id);
         }
     }
 
     printf("\n");
 }
 
-void imprimeListas (alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc) {
+void imprimeProfessores(profStr professores[], int *posProf) {
+    int i;
+
+    printf("\n\t\t--Lista de Professores Cadastrados--\n\n\n");
+
+    if(*posProf == 0){
+        printf("NENHUM PROFESSOR FOI CADASTRADO AINDA!");
+
+    }else{
+        for(i=0; i<*posProf;i++) {
+            printf("OPCAO\t\tNOME\t\tCOD\n[%d] \t\t%s\t\t %d\n", i+1, professores[i].nome, professores[i].cod);
+        }
+    }
+
+    printf("\n");
+}
+
+void imprimeAlunosMatriculados(discStr disciplinas[], int *posDisc) {
+    int ctrl, i, j;
+    system("clear");
+    imprimeDisciplinas(disciplinas, posDisc);
+
+    printf("\nSelecione uma disciplina: "); scanf("%d", &ctrl);
+    for(i=0; i < disciplinas[ctrl-1].matriculas; i++){
+        printf("\n- %s", disciplinas[ctrl-1].matriculados[i]);
+    }
+    scanf("%d", &i);
+}
+
+void imprimeListas (alunoStr alunos[], int *posAl, discStr disciplinas[], int *posDisc, profStr professores[], int *posProf) {
     int i;
     system("clear");
     imprimeAlunos(alunos, posAl);
     imprimeDisciplinas(disciplinas, posDisc);
+    imprimeProfessores(professores, posProf);
     scanf("%d", &i);
 }
