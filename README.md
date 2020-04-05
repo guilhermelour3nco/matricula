@@ -1,5 +1,5 @@
 # Matricula acadêmica
-# [---_ _ _ _ _ _ _ ] [35.7%]
+# [---- _ _ _ _ _ _ ] [42.8%]
 
 ## Requisitos do projeto
 
@@ -22,7 +22,7 @@
 - [x] Imprimir a lista de todas as disciplinas.
 - [ ] Imprimir a lista de todos os professores.
 - [ ] Imprimir a lista de disciplinas de um aluno.
-- [ ] Imprimir a lista de alunos em uma disciplina.
+- [x] Imprimir a lista de alunos em uma disciplina.
 - [ ] Imprimir a lista de todas as disciplinas ministradas por um professor.
 - [ ] Imprimir a lista de todos os professores vinculados a uma disciplina.
 
