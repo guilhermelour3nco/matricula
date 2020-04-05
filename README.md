@@ -1,5 +1,5 @@
 # Matricula acadêmica
-# Scorecard | [- - - - - - - - * *] | [85.7%]
+# Scorecard | [- - - - - - - - - *] | [92.9%]
 
 ## Requisitos do projeto
 
@@ -14,7 +14,7 @@
 - [x] Realizar a matrícula de  um conjunto de alunos em um conjunto de disciplinas.
 - [x] Vincular professores a disciplinas:  Vincular um professor a um conjunto de disciplinas.
 - [ ] Cancelar a matrícula de um conjunto de alunos de um conjunto de disciplinas.
-- [ ] Remover vínculo de professor de um conjunto de disciplinas.
+- [x] Remover vínculo de professor de um conjunto de disciplinas.
 
 ### lista
 
