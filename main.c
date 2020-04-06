@@ -1,7 +1,6 @@
 /**
- * GUILHERME LOURENÇO RA - 18709865
  * 
- * ATENÇÃO PROFESSOR
+ * ATENÇÃO
  * Este código esta hospedado também no GitHub, -> por favor ACESSE E LEIA O ARQUIVO README.md <-
  * https://github.com/guilhermelour3nco/matricula
  * 
